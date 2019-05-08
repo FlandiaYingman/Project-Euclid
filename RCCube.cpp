@@ -184,6 +184,46 @@ RCCube &RCCube::b2() {
     return *this;
 }
 
+RCCube &RCCube::xl() {
+    RCCube temp = *this;
+    left = left.rotateClockwise();
+    right = right.rotateAntiClockwise();
+    front = temp.getUp();
+    down = temp.getFront();
+    back = temp.getDown().reverseX().reverseY();
+    up = temp.getBack().reverseX().reverseY();
+    return *this;
+}
+RCCube &RCCube::xr() {
+    return xl().xl().xl();
+}
+RCCube &RCCube::xu() {
+    RCCube temp = *this;
+    up = up.rotateClockwise();
+    down = down.rotateAntiClockwise();
+    front = temp.getRight();
+    left = temp.getFront();
+    back = temp.getLeft();
+    right = temp.getBack();
+    return *this;
+}
+RCCube &RCCube::xd() {
+    return xu().xu().xu();
+}
+RCCube &RCCube::xf() {
+    RCCube temp = *this;
+    front = front.rotateClockwise();
+    back = back.rotateAntiClockwise();
+    up = temp.getLeft().rotateClockwise();
+    right = temp.getUp().rotateClockwise();
+    down = temp.getRight().rotateClockwise();
+    left = temp.getDown().rotateClockwise();
+    return *this;
+}
+RCCube &RCCube::xb() {
+    return xf().xf().xf();
+}
+
 RCCube &RCCube::doString(std::string str) {
     std::stringstream sstream(str);
     while (!sstream.eof()) {

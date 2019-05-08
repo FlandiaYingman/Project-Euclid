@@ -56,6 +56,13 @@ class RCCube {
     RCCube &f2();
     RCCube &b2();
 
+    RCCube &xl();
+    RCCube &xr();
+    RCCube &xu();
+    RCCube &xd();
+    RCCube &xf();
+    RCCube &xb();
+
     RCCube &doString(std::string str);
 };
 
