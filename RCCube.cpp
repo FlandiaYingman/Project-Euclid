@@ -224,6 +224,25 @@ RCCube &RCCube::xb() {
     return xf().xf().xf();
 }
 
+RCCube &RCCube::cl() {
+    return li().r().xl();
+}
+RCCube &RCCube::cr() {
+    return ri().l().xr();
+}
+RCCube &RCCube::cu() {
+    return ui().d().xu();
+}
+RCCube &RCCube::cd() {
+    return di().u().xd();
+}
+RCCube &RCCube::cf() {
+    return fi().b().xf();
+}
+RCCube &RCCube::cb() {
+    return bi().f().xb();
+}
+
 RCCube &RCCube::doString(std::string str) {
     std::stringstream sstream(str);
     while (!sstream.eof()) {
