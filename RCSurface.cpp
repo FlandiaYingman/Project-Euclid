@@ -70,6 +70,13 @@ RCSurface RCSurface::rotateAntiClockwise() {
     return rotateClockwise().rotateClockwise().rotateClockwise();
 }
 
+RCSurface RCSurface::reverseX() {
+    return RCSurface({ { surface[0][2], surface[0][1], surface[0][0] }, { surface[1][2], surface[1][1], surface[1][0] }, { surface[2][2], surface[2][1], surface[2][0] } });
+}
+RCSurface RCSurface::reverseY() {
+    return RCSurface({ { surface[2][0], surface[2][1], surface[2][2] }, { surface[1][0], surface[1][1], surface[1][2] }, { surface[0][0], surface[0][1], surface[0][2] } });
+}
+
 RCLine RCSurface::getTopRow() {
     return { surface[0][0], surface[0][1], surface[0][2] };
 }

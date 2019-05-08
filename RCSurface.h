@@ -50,6 +50,9 @@ class RCSurface {
     RCSurface rotateClockwise();
     RCSurface rotateAntiClockwise();
 
+    RCSurface reverseX();
+    RCSurface reverseY();
+
     RCLine getTopRow();
     RCLine getMiddleRow();
     RCLine getBottomRow();
