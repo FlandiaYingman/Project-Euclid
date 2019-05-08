@@ -1,2 +1,4 @@
 # Project-Euclid
-A Project that solves Rubik's Cubes
+
+A Project that solves Rubik's Cubes.
+It is still developing...
