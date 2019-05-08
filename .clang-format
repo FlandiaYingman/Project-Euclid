@@ -1,0 +1,8 @@
+BasedOnStyle: LLVM
+ColumnLimit: 256
+IndentWidth: 4
+Cpp11BracedListStyle: false
+BinPackArguments: false
+AllowShortFunctionsOnASingleLine: false
+AllowShortBlocksOnASingleLine: false
+MaxEmptyLinesToKeep: 2
