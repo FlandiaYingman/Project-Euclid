@@ -27,7 +27,8 @@ RCLine RCLine::reverse() {
 RCSurface::RCSurface() {
 }
 RCSurface::RCSurface(RCColor color) {
-    surface;
+    RCLine line = { color, color, color };
+    surface = { line, line, line };
 }
 RCSurface::RCSurface(std::initializer_list<RCLine> initList) {
     int i = 0;
