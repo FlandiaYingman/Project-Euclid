@@ -1,6 +1,7 @@
 #include "RCCube.h"
 #include "RCSurface.h"
 
+#include <chrono>
 #include <random>
 #include <sstream>
 #include <string>
@@ -25,7 +26,8 @@ RCCube::RCCube(RCSurface left, RCSurface right, RCSurface up, RCSurface down, RC
 }
 
 void RCCube::randomize(RCCube &cube) {
-    std::default_random_engine generator;
+    unsigned int seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine generator(seed);
     std::uniform_int_distribution<int> distribution(0, 5);
 
     for (size_t i = 0; i < 64; i++) {
