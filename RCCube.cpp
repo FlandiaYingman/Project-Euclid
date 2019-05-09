@@ -1,6 +1,7 @@
 #include "RCCube.h"
 #include "RCSurface.h"
 
+#include <random>
 #include <sstream>
 #include <string>
 
@@ -21,6 +22,35 @@ RCCube::RCCube(RCSurface left, RCSurface right, RCSurface up, RCSurface down, RC
     this->down = down;
     this->front = front;
     this->back = back;
+}
+
+void RCCube::randomize(RCCube &cube) {
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(0, 5);
+
+    for (size_t i = 0; i < 64; i++) {
+        int r = distribution(generator);
+        switch (r) {
+        case 0:
+            cube.l();
+            break;
+        case 1:
+            cube.r();
+            break;
+        case 2:
+            cube.u();
+            break;
+        case 3:
+            cube.d();
+            break;
+        case 4:
+            cube.f();
+            break;
+        case 5:
+            cube.b();
+            break;
+        }
+    }
 }
 
 RCSurface RCCube::getLeft() const {

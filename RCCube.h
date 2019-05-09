@@ -26,6 +26,8 @@ class RCCube {
     RCCube();
     RCCube(RCSurface left, RCSurface right, RCSurface up, RCSurface down, RCSurface front, RCSurface back);
 
+    static void randomize(RCCube &cube);
+
     RCSurface getLeft() const;
     RCSurface getRight() const;
     RCSurface getUp() const;
