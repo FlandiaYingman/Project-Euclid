@@ -31,6 +31,8 @@ struct RCCornerPiecePos {
 RCEdgePiecePos findEdge(const RCCube &cube, const RCEdgePiece &edge);
 RCCornerPiecePos findCorner(const RCCube &cube, const RCCornerPiece &corner);
 
+void makeTopCross(RCCube &cube);
+
 } // namespace Rc
 
 #endif // RC_SOLVER_H_

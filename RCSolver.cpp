@@ -1,6 +1,10 @@
 #include "RCSolver.h"
 #include "RCSurface.h"
 
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
 namespace Rc {
 
 RCEdgePiece::RCEdgePiece(RCColor first, RCColor second) {
@@ -374,6 +378,256 @@ RCCornerPiecePos findCorner(const RCCube &cube, const RCCornerPiece &corner) {
         }
     }
     return RCCornerPiecePos();
+}
+
+
+std::string changeFacing(const RCCube &cube, const RCFacing &front, const RCFacing &up) {
+    switch (front) {
+    case RCFacing::LEFT:
+        switch (up) {
+        case RCFacing::UP:
+            return "xd";
+        case RCFacing::FRONT:
+            return "xr xd";
+        case RCFacing::DOWN:
+            return "xr xr xd";
+        case RCFacing::BACK:
+            return "xl xd";
+        }
+        break;
+    case RCFacing::RIGHT:
+        switch (up) {
+        case RCFacing::UP:
+            return "xu";
+        case RCFacing::BACK:
+            return "xl xu";
+        case RCFacing::DOWN:
+            return "xl xl xu";
+        case RCFacing::FRONT:
+            return "xr xu";
+        }
+        break;
+    case RCFacing::UP:
+        switch (up) {
+        case RCFacing::FRONT:
+            return "xu xu xl";
+        case RCFacing::LEFT:
+            return "xd xl";
+        case RCFacing::BACK:
+            return "xl";
+        case RCFacing::RIGHT:
+            return "xu xl";
+        }
+        break;
+        ;
+    case RCFacing::DOWN:
+        switch (up) {
+        case RCFacing::FRONT:
+            return "xr";
+        case RCFacing::RIGHT:
+            return "xu xr";
+        case RCFacing::BACK:
+            return "xu xu xr";
+        case RCFacing::LEFT:
+            return "xd xr";
+        }
+        break;
+    case RCFacing::FRONT:
+        switch (up) {
+        case RCFacing::UP:
+            return "";
+        case RCFacing::RIGHT:
+            return "xb";
+        case RCFacing::DOWN:
+            return "xf xf";
+        case RCFacing::LEFT:
+            return "xf";
+        }
+        break;
+    case RCFacing::BACK:
+        switch (up) {
+        case RCFacing::UP:
+            return "xu xu";
+        case RCFacing::LEFT:
+            return "xu xu xb";
+        case RCFacing::DOWN:
+            return "xu xu xf xf";
+        case RCFacing::RIGHT:
+            return "xu xu xf";
+        }
+        break;
+    }
+    return "null";
+}
+
+
+static void makeTopCross0(RCCube &cube, const RCFacing &facing, const RCDirection &direction) {
+    switch (facing) {
+    case RCFacing::FRONT:
+        switch (direction) {
+        case RCDirection::LEFT:
+            cube.cd();
+            makeTopCross0(cube, RCFacing::RIGHT, RCDirection::LEFT);
+            cube.cu();
+            break;
+        case RCDirection::RIGHT:
+            cube.cu();
+            makeTopCross0(cube, RCFacing::LEFT, RCDirection::RIGHT);
+            cube.cd();
+            break;
+        case RCDirection::UP:
+            cube.f();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::RIGHT);
+            break;
+        case RCDirection::DOWN:
+            cube.f();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::LEFT);
+            break;
+        default:
+            throw std::logic_error("direction is invalid");
+        }
+        break;
+    case RCFacing::BACK:
+        switch (direction) {
+        case RCDirection::LEFT:
+            cube.cu().cu();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::LEFT);
+            break;
+        case RCDirection::RIGHT:
+            cube.cu().cu();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::RIGHT);
+            break;
+        case RCDirection::UP:
+            cube.cr();
+            cube.d2();
+            cube.cl();
+            cube.d2();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::DOWN);
+            break;
+        case RCDirection::DOWN:
+            cube.d2();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::DOWN);
+            break;
+        default:
+            throw std::logic_error("direction is invalid");
+        }
+        break;
+    case RCFacing::LEFT:
+        switch (direction) {
+        case RCDirection::LEFT:
+            cube.cd();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::LEFT);
+            break;
+        case RCDirection::RIGHT:
+            cube.f();
+            break;
+        case RCDirection::UP:
+            cube.cb();
+            cube.d2();
+            cube.cf();
+            cube.d2();
+            makeTopCross0(cube, RCFacing::RIGHT, RCDirection::DOWN);
+            break;
+        case RCDirection::DOWN:
+            cube.d();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::DOWN);
+            break;
+        default:
+            throw std::logic_error("direction is invalid");
+        }
+        break;
+    case RCFacing::RIGHT:
+        switch (direction) {
+        case RCDirection::LEFT:
+            cube.fi();
+            break;
+        case RCDirection::RIGHT:
+            cube.cd().cd().cd();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::RIGHT);
+            break;
+        case RCDirection::UP:
+            cube.cf();
+            cube.d2();
+            cube.cb();
+            cube.d2();
+            makeTopCross0(cube, RCFacing::LEFT, RCDirection::DOWN);
+            break;
+        case RCDirection::DOWN:
+            cube.di();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::DOWN);
+            break;
+        default:
+            throw std::logic_error("direction is invalid");
+        }
+        break;
+    case RCFacing::UP:
+        switch (direction) {
+        case RCDirection::LEFT:
+            cube.l();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::LEFT);
+            break;
+        case RCDirection::RIGHT:
+            cube.ri();
+            makeTopCross0(cube, RCFacing::FRONT, RCDirection::RIGHT);
+            break;
+        case RCDirection::UP:
+            cube.b();
+            makeTopCross0(cube, RCFacing::LEFT, RCDirection::LEFT);
+            break;
+        case RCDirection::DOWN:
+            break;
+        default:
+            throw std::logic_error("direction is invalid");
+        }
+        break;
+    case RCFacing::DOWN:
+        switch (direction) {
+        case RCDirection::LEFT:
+            cube.d();
+            makeTopCross0(cube, RCFacing::DOWN, RCDirection::UP);
+            break;
+        case RCDirection::RIGHT:
+            cube.di();
+            makeTopCross0(cube, RCFacing::DOWN, RCDirection::UP);
+            break;
+        case RCDirection::UP:
+            cube.cl();
+            cube.d2();
+            cube.cr();
+            break;
+        case RCDirection::DOWN:
+            cube.d2();
+            makeTopCross0(cube, RCFacing::DOWN, RCDirection::UP);
+            break;
+        default:
+            throw std::logic_error("direction is invalid");
+        }
+        break;
+    default:
+        throw std::logic_error("facing is invalid");
+    }
+}
+
+void makeTopCross(RCCube &cube) {
+    RCEdgePiecePos whiteRedPos = findEdge(cube, RCEdgePiece(RCColor::WHITE, RCColor::RED));
+    makeTopCross0(cube, whiteRedPos.first, adjacentDirection(whiteRedPos.first, whiteRedPos.second));
+    cube.u();
+
+    RCEdgePiecePos whiteBluePos = findEdge(cube, RCEdgePiece(RCColor::WHITE, RCColor::BLUE));
+    makeTopCross0(cube, whiteBluePos.first, adjacentDirection(whiteBluePos.first, whiteBluePos.second));
+    cube.u();
+
+    RCEdgePiecePos whiteOrangePos = findEdge(cube, RCEdgePiece(RCColor::WHITE, RCColor::ORANGE));
+    makeTopCross0(cube, whiteOrangePos.first, adjacentDirection(whiteOrangePos.first, whiteOrangePos.second));
+    cube.u();
+
+    RCEdgePiecePos whiteGreenPos = findEdge(cube, RCEdgePiece(RCColor::WHITE, RCColor::GREEN));
+    makeTopCross0(cube, whiteGreenPos.first, adjacentDirection(whiteGreenPos.first, whiteGreenPos.second));
+    cube.u();
+
+    while (cube.getFront()[1][1] != RCColor::RED) {
+        cube.cu();
+    }
 }
 
 } // namespace Rc
