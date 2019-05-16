@@ -33,6 +33,8 @@ RCCornerPiecePos findCorner(const RCCube &cube, const RCCornerPiece &corner);
 
 void makeTopCross(RCCube &cube);
 
+void makeTopLayer(RCCube &cube);
+
 } // namespace Rc
 
 #endif // RC_SOLVER_H_

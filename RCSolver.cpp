@@ -70,7 +70,7 @@ static bool isAdjacent(const RCFacing &facingA, const RCFacing &facingB) {
 static bool isAdjacent(const RCFacing &facingA, const RCFacing &facingB, const RCFacing &facingC) {
     switch (facingA) {
     case RCFacing::LEFT:
-        if (facingB == RCFacing::LEFT && facingC == RCFacing::UP) {
+        if (facingB == RCFacing::BACK && facingC == RCFacing::UP) {
             return true;
         }
         if (facingB == RCFacing::UP && facingC == RCFacing::FRONT) {
@@ -236,7 +236,7 @@ static RCDirection adjacentDirection(const RCFacing &facingA, const RCFacing &fa
 static RCDirection adjacentDirection(const RCFacing &facingA, const RCFacing &facingB, const RCFacing &facingC) {
     switch (facingA) {
     case RCFacing::LEFT:
-        if (facingB == RCFacing::LEFT && facingC == RCFacing::UP) {
+        if (facingB == RCFacing::BACK && facingC == RCFacing::UP) {
             return RCDirection::UPPER_LEFT;
         }
         if (facingB == RCFacing::UP && facingC == RCFacing::FRONT) {
@@ -628,6 +628,174 @@ void makeTopCross(RCCube &cube) {
     while (cube.getFront()[1][1] != RCColor::RED) {
         cube.cu();
     }
+}
+
+
+static void makeTopLayerLhs0(RCCube &cube) {
+    cube.di().ri().d().r();
+}
+
+static void makeTopLayerRhs0(RCCube &cube) {
+    cube.d().f().di().fi();
+}
+
+static void makeTopLayer0(RCCube &cube, const RCFacing &facing, const RCDirection &direction) {
+    switch (facing) {
+    case RCFacing::LEFT:
+        switch (direction) {
+        case RCDirection::UPPER_LEFT:
+            cube.li().d().l();
+            makeTopLayer0(cube, RCFacing::DOWN, RCDirection::LOWER_LEFT);
+            break;
+        case RCDirection::UPPER_RIGHT:
+            cube.l().di().li();
+            makeTopLayer0(cube, RCFacing::DOWN, RCDirection::UPPER_LEFT);
+            break;
+        case RCDirection::LOWER_LEFT:
+            cube.d();
+            makeTopLayer0(cube, RCFacing::FRONT, RCDirection::LOWER_LEFT);
+            break;
+        case RCDirection::LOWER_RIGHT:
+            cube.d();
+            makeTopLayer0(cube, RCFacing::FRONT, RCDirection::LOWER_RIGHT);
+            break;
+        default:
+            throw std::logic_error("invalid direction");
+        }
+        break;
+    case RCFacing::RIGHT:
+        switch (direction) {
+        case RCDirection::UPPER_LEFT:
+            makeTopLayerRhs0(cube);
+            makeTopLayer0(cube, RCFacing::RIGHT, RCDirection::LOWER_LEFT);
+            break;
+        case RCDirection::UPPER_RIGHT:
+            cube.bi().d().b();
+            makeTopLayer0(cube, RCFacing::RIGHT, RCDirection::LOWER_RIGHT);
+            break;
+        case RCDirection::LOWER_LEFT:
+            makeTopLayerRhs0(cube);
+            break;
+        case RCDirection::LOWER_RIGHT:
+            cube.di();
+            makeTopLayer0(cube, RCFacing::FRONT, RCDirection::LOWER_RIGHT);
+            break;
+        default:
+            throw std::logic_error("invalid direction");
+        }
+        break;
+    case RCFacing::FRONT:
+        switch (direction) {
+        case RCDirection::UPPER_LEFT:
+            cube.l().di().li();
+            makeTopLayer0(cube, RCFacing::FRONT, RCDirection::LOWER_LEFT);
+            break;
+        case RCDirection::UPPER_RIGHT:
+            makeTopLayerLhs0(cube);
+            makeTopLayer0(cube, RCFacing::FRONT, RCDirection::LOWER_RIGHT);
+            break;
+        case RCDirection::LOWER_LEFT:
+            cube.d();
+            makeTopLayer0(cube, RCFacing::RIGHT, RCDirection::LOWER_LEFT);
+            break;
+        case RCDirection::LOWER_RIGHT:
+            makeTopLayerLhs0(cube);
+            break;
+        default:
+            throw std::logic_error("invalid direction");
+        }
+        break;
+    case RCFacing::BACK:
+        switch (direction) {
+        case RCDirection::UPPER_LEFT:
+            cube.r().di().ri();
+            makeTopLayer0(cube, RCFacing::BACK, RCDirection::LOWER_LEFT);
+            break;
+        case RCDirection::UPPER_RIGHT:
+            cube.li().d().l();
+            makeTopLayer0(cube, RCFacing::BACK, RCDirection::LOWER_RIGHT);
+            break;
+        case RCDirection::LOWER_LEFT:
+            cube.di();
+            makeTopLayer0(cube, RCFacing::RIGHT, RCDirection::LOWER_LEFT);
+            break;
+        case RCDirection::LOWER_RIGHT:
+            cube.di();
+            makeTopLayer0(cube, RCFacing::RIGHT, RCDirection::LOWER_RIGHT);
+            break;
+        default:
+            throw std::logic_error("invalid direction");
+        }
+        break;
+    case RCFacing::UP:
+        switch (direction) {
+        case RCDirection::UPPER_LEFT:
+            cube.b().d().bi();
+            makeTopLayer0(cube, RCFacing::FRONT, RCDirection::LOWER_LEFT);
+            break;
+        case RCDirection::UPPER_RIGHT:
+            cube.bi().di().b();
+            makeTopLayer0(cube, RCFacing::FRONT, RCDirection::LOWER_RIGHT);
+            break;
+        case RCDirection::LOWER_LEFT:
+            cube.l().d().li();
+            makeTopLayer0(cube, RCFacing::RIGHT, RCDirection::LOWER_LEFT);
+            break;
+        case RCDirection::LOWER_RIGHT:
+            cube.ri().d().r();
+            makeTopLayer0(cube, RCFacing::RIGHT, RCDirection::LOWER_LEFT);
+            break;
+        default:
+            throw std::logic_error("invalid direction");
+        }
+        break;
+    case RCFacing::DOWN:
+        switch (direction) {
+        case RCDirection::UPPER_LEFT:
+            cube.d();
+            makeTopLayer0(cube, RCFacing::DOWN, RCDirection::UPPER_RIGHT);
+            break;
+        case RCDirection::UPPER_RIGHT:
+            makeTopLayerLhs0(cube);
+            makeTopLayer0(cube, RCFacing::FRONT, RCDirection::UPPER_RIGHT);
+            break;
+        case RCDirection::LOWER_LEFT:
+            cube.d2();
+            makeTopLayer0(cube, RCFacing::DOWN, RCDirection::UPPER_RIGHT);
+            break;
+        case RCDirection::LOWER_RIGHT:
+            cube.di();
+            makeTopLayer0(cube, RCFacing::DOWN, RCDirection::UPPER_RIGHT);
+            break;
+        default:
+            throw std::logic_error("invalid direction");
+        }
+        break;
+    default:
+        throw std::logic_error("invalid facing");
+    }
+}
+
+void makeTopLayer(RCCube &cube) {
+    auto whiteBlueRedPos = findCorner(cube, RCCornerPiece(RCColor::WHITE, RCColor::BLUE, RCColor::RED));
+    makeTopLayer0(cube, whiteBlueRedPos.first, adjacentDirection(whiteBlueRedPos.first, whiteBlueRedPos.second, whiteBlueRedPos.third));
+    cube.u();
+    cube.cu();
+
+    auto whiteOrangeBluePos = findCorner(cube, RCCornerPiece(RCColor::WHITE, RCColor::ORANGE, RCColor::BLUE));
+    makeTopLayer0(cube, whiteOrangeBluePos.first, adjacentDirection(whiteOrangeBluePos.first, whiteOrangeBluePos.second, whiteOrangeBluePos.third));
+    cube.u();
+    cube.cu();
+
+    auto whiteGreenOrangePos = findCorner(cube, RCCornerPiece(RCColor::WHITE, RCColor::GREEN, RCColor::ORANGE));
+    makeTopLayer0(cube, whiteGreenOrangePos.first, adjacentDirection(whiteGreenOrangePos.first, whiteGreenOrangePos.second, whiteGreenOrangePos.third));
+    cube.u();
+    cube.cu();
+
+    auto whiteRedGreenPos = findCorner(cube, RCCornerPiece(RCColor::WHITE, RCColor::RED, RCColor::GREEN));
+    makeTopLayer0(cube, whiteRedGreenPos.first, adjacentDirection(whiteRedGreenPos.first, whiteRedGreenPos.second, whiteRedGreenPos.third));
+    cube.u();
+    cube.cu();
 }
 
 } // namespace Rc
