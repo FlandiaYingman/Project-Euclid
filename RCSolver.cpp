@@ -798,4 +798,159 @@ void makeTopLayer(RCCube &cube) {
     cube.cu();
 }
 
+
+static void makeMiddleLayerLhs0(RCCube &cube) {
+    cube.fi().di().fi().di().fi().d().f().d().f();
+}
+
+static void makeMiddleLayerRhs0(RCCube &cube) {
+    cube.r().d().r().d().r().di().ri().di().ri();
+}
+
+static void makeMiddleLayerMoveDownRhs0(RCCube &cube) {
+    cube.f().d().f().d().f().di().fi().di().fi();
+}
+
+static void makeMiddleLayerMoveDown0(RCCube &cube, const RCFacing &facing, const RCDirection &direction) {
+    switch (facing) {
+    case RCFacing::FRONT:
+        switch (direction) {
+        case RCDirection::LEFT:
+            makeMiddleLayerMoveDownRhs0(cube);
+            cube.d2();
+            break;
+        case RCDirection::RIGHT:
+            makeMiddleLayerLhs0(cube);
+            cube.d2();
+            break;
+        default:
+            throw std::logic_error("invalid facing");
+        }
+        break;
+    case RCFacing::BACK:
+        cube.xu().xu();
+        makeMiddleLayerMoveDown0(cube, RCFacing::FRONT, direction);
+        cube.xu().xu();
+        break;
+    case RCFacing::LEFT:
+        cube.xu().xu().xu();
+        makeMiddleLayerMoveDown0(cube, RCFacing::FRONT, direction);
+        cube.xu();
+        break;
+    case RCFacing::RIGHT:
+        cube.xu();
+        makeMiddleLayerMoveDown0(cube, RCFacing::FRONT, direction);
+        cube.xu().xu().xu();
+        break;
+    default:
+        throw std::logic_error("invalid facing");
+    }
+}
+
+static void makeMiddleLayer0(RCCube &cube, const RCFacing &facing, const RCDirection &direction) {
+    switch (facing) {
+    case RCFacing::LEFT:
+        switch (direction) {
+        case RCDirection::LEFT:
+        case RCDirection::RIGHT:
+            makeMiddleLayerMoveDown0(cube, facing, direction);
+            makeMiddleLayer0(cube, facing, RCDirection::DOWN);
+            break;
+        case RCDirection::DOWN:
+            cube.d();
+            makeMiddleLayer0(cube, RCFacing::FRONT, RCDirection::DOWN);
+            break;
+        default:
+            throw std::logic_error("invalid direction");
+        }
+        break;
+    case RCFacing::RIGHT:
+        switch (direction) {
+        case RCDirection::LEFT:
+        case RCDirection::RIGHT:
+            makeMiddleLayerMoveDown0(cube, facing, direction);
+            makeMiddleLayer0(cube, facing, RCDirection::DOWN);
+            break;
+        case RCDirection::DOWN:
+            cube.di();
+            makeMiddleLayer0(cube, RCFacing::FRONT, RCDirection::DOWN);
+            break;
+        default:
+            throw std::logic_error("invalid direction");
+        }
+        break;
+    case RCFacing::FRONT:
+        switch (direction) {
+        case RCDirection::LEFT:
+            makeMiddleLayerMoveDown0(cube, facing, direction);
+            makeMiddleLayer0(cube, facing, RCDirection::DOWN);
+            break;
+        case RCDirection::RIGHT:
+            break;
+        case RCDirection::DOWN:
+            makeMiddleLayerLhs0(cube);
+            break;
+        default:
+            throw std::logic_error("invalid direction");
+        }
+        break;
+    case RCFacing::BACK:
+        switch (direction) {
+        case RCDirection::LEFT:
+        case RCDirection::RIGHT:
+            makeMiddleLayerMoveDown0(cube, facing, direction);
+            makeMiddleLayer0(cube, facing, RCDirection::DOWN);
+            break;
+        case RCDirection::DOWN:
+            cube.d2();
+            makeMiddleLayer0(cube, RCFacing::FRONT, RCDirection::DOWN);
+            break;
+        default:
+            throw std::logic_error("invalid direction");
+        }
+        break;
+    case RCFacing::DOWN:
+        switch (direction) {
+        case RCDirection::LEFT:
+            cube.d2();
+            makeMiddleLayer0(cube, RCFacing::DOWN, RCDirection::RIGHT);
+            break;
+        case RCDirection::RIGHT:
+            makeMiddleLayerRhs0(cube);
+            break;
+        case RCDirection::UP:
+            cube.d();
+            makeMiddleLayer0(cube, RCFacing::DOWN, RCDirection::RIGHT);
+            break;
+        case RCDirection::DOWN:
+            cube.di();
+            makeMiddleLayer0(cube, RCFacing::DOWN, RCDirection::RIGHT);
+            break;
+        default:
+            throw std::logic_error("invalid direction");
+        }
+        break;
+    default:
+        throw std::logic_error("invalid facing");
+    }
+}
+
+void makeMiddleLayer(RCCube &cube) {
+    RCEdgePiecePos redBluePos = findEdge(cube, RCEdgePiece(RCColor::RED, RCColor::BLUE));
+    makeMiddleLayer0(cube, redBluePos.first, adjacentDirection(redBluePos.first, redBluePos.second));
+    cube.xu();
+
+    RCEdgePiecePos blueOrangePos = findEdge(cube, RCEdgePiece(RCColor::BLUE, RCColor::ORANGE));
+    makeMiddleLayer0(cube, blueOrangePos.first, adjacentDirection(blueOrangePos.first, blueOrangePos.second));
+    cube.xu();
+
+    RCEdgePiecePos orangeGreenPos = findEdge(cube, RCEdgePiece(RCColor::ORANGE, RCColor::GREEN));
+    makeMiddleLayer0(cube, orangeGreenPos.first, adjacentDirection(orangeGreenPos.first, orangeGreenPos.second));
+    cube.xu();
+
+    RCEdgePiecePos greenRedPos = findEdge(cube, RCEdgePiece(RCColor::GREEN, RCColor::RED));
+    makeMiddleLayer0(cube, greenRedPos.first, adjacentDirection(greenRedPos.first, greenRedPos.second));
+    cube.xu();
+}
+
 } // namespace Rc
