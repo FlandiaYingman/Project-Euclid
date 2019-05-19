@@ -18,6 +18,8 @@ static void testMakeMiddleLayer();
 static void testMakeMiddleLayer(string str);
 static void testMakeBottomCross();
 static void testMakeBottomCross(string str);
+static void testMakeBottomSurface();
+static void testMakeBottomSurface(string str);
 
 
 int main() {
@@ -28,8 +30,10 @@ int main() {
     std::string testStr1 = "R O O G W O G O W  Y R O Y G Y B W R  Y Y B B R W W W B  O G G G B Y O B W  W W G R O G R B R  B R Y B Y R Y O G";
     std::string testStr2 = "B R G G W W W G B  W Y R R G Y R G Y  B O Y B R B G R B  O B O O B R Y W W  Y Y O G O W G O W  R B R W Y O G Y O";
     std::string testStr3 = "G G B B W O W G R  Y W G B G B G W R  R O G R R O W O B  Y W R B B G W Y Y  Y Y O W O Y B G W  B Y O R Y R O R O";
+    std::string testStr4 = "B G G B W Y B O R  W Y R R G G W W W  Y W G R R W R W B  Y R O R B O O O R  Y O O B O B W Y O  G G Y B Y Y G G B";
 
-    testMakeBottomCross();
+
+    testMakeBottomSurface();
 
     return 0;
 }
@@ -185,5 +189,42 @@ static void testMakeBottomCross(string str) {
     makeTopLayer(cube);
     makeMiddleLayer(cube);
     makeBottomCross(cube);
+    cout << cube << endl;
+}
+
+static void testMakeBottomSurface() {
+    auto cube = RCCube();
+    while (true) {
+        RCCube::randomize(cube);
+        auto cubeCopy = cube;
+        cout << cubeCopy << endl;
+
+        makeTopCross(cube);
+        makeTopLayer(cube);
+        makeMiddleLayer(cube);
+        makeBottomCross(cube);
+        makeBottomSurface(cube);
+
+        cout << cube << endl;
+
+        auto down = cube.getDown();
+        if (!(down[0][0] == RCColor::YELLOW && down[0][1] == RCColor::YELLOW && down[0][2] == RCColor::YELLOW && down[1][0] == RCColor::YELLOW && down[1][1] == RCColor::YELLOW && down[1][2] == RCColor::YELLOW && down[2][0] == RCColor::YELLOW &&
+           down[2][1] == RCColor::YELLOW && down[2][2] == RCColor::YELLOW)) {
+            throw logic_error("ex");
+        }
+    }
+}
+
+static void testMakeBottomSurface(string str) {
+    stringstream sstream(str);
+    RCCube cube;
+    sstream >> cube;
+
+    cout << cube << endl;
+    makeTopCross(cube);
+    makeTopLayer(cube);
+    makeMiddleLayer(cube);
+    makeBottomCross(cube);
+    makeBottomSurface(cube);
     cout << cube << endl;
 }

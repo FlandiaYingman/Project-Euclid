@@ -39,6 +39,8 @@ void makeMiddleLayer(RCCube &cube);
 
 void makeBottomCross(RCCube &cube);
 
+void makeBottomSurface(RCCube &cube);
+
 } // namespace Rc
 
 #endif // RC_SOLVER_H_

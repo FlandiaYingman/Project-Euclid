@@ -1009,10 +1009,74 @@ void makeBottomCross(RCCube &cube) {
             makeBottomCrossBent0(cube);
             return;
         }
-        std::cout << cube << std::endl;
         cube.d();
     }
 
+    throw std::logic_error("can't match any pattern with the cube");
+}
+
+
+static bool makeBottomSurfaceIsLhsFish(const RCCube &cube) {
+    auto down = cube.getDown();
+    auto front = cube.getFront();
+    auto right = cube.getRight();
+    auto back = cube.getBack();
+    bool downFish = down[0][0] == RCColor::YELLOW && down[0][1] == RCColor::YELLOW && down[1][0] == RCColor::YELLOW && down[1][1] == RCColor::YELLOW && down[1][2] == RCColor::YELLOW && down[2][1] == RCColor::YELLOW;
+    bool sideFish = front[2][2] == RCColor::YELLOW && right[2][2] == RCColor::YELLOW && back[2][2] == RCColor::YELLOW;
+    return downFish && sideFish;
+}
+
+static bool makeBottomSurfaceIsRhsFish(const RCCube &cube) {
+    auto down = cube.getDown();
+    auto front = cube.getFront();
+    auto left = cube.getLeft();
+    auto back = cube.getBack();
+    bool downFish = down[0][1] == RCColor::YELLOW && down[0][2] == RCColor::YELLOW && down[1][0] == RCColor::YELLOW && down[1][1] == RCColor::YELLOW && down[1][2] == RCColor::YELLOW && down[2][1] == RCColor::YELLOW;
+    bool sideFish = front[2][0] == RCColor::YELLOW && left[2][0] == RCColor::YELLOW && back[2][0] == RCColor::YELLOW;
+    return downFish && sideFish;
+}
+
+static bool makeBottomSurfaceIsException(const RCCube &cube) {
+    return cube.getFront()[2][2] == RCColor::YELLOW;
+}
+
+static bool makeBottomSurfaceIsFinished(const RCCube &cube) {
+    auto down = cube.getDown();
+    return down[0][0] == RCColor::YELLOW && down[0][1] == RCColor::YELLOW && down[0][2] == RCColor::YELLOW && down[1][0] == RCColor::YELLOW && down[1][1] == RCColor::YELLOW && down[1][2] == RCColor::YELLOW && down[2][0] == RCColor::YELLOW &&
+           down[2][1] == RCColor::YELLOW && down[2][2] == RCColor::YELLOW;
+}
+
+static void makeBottomSurfaceLhsFish(RCCube &cube) {
+    cube.ri().di().r().di().ri().d2().r();
+}
+
+static void makeBottomSurfaceRhsFish(RCCube &cube) {
+    cube.l().d().li().d().l().d2().li();
+}
+
+void makeBottomSurface(RCCube &cube) {
+    if (makeBottomSurfaceIsFinished(cube)) {
+        return;
+    }
+    for (int i = 0; i < 4; i++) {
+        if (makeBottomSurfaceIsLhsFish(cube)) {
+            makeBottomSurfaceLhsFish(cube);
+            return;
+        }
+        if (makeBottomSurfaceIsRhsFish(cube)) {
+            makeBottomSurfaceRhsFish(cube);
+            return;
+        }
+        cube.d();
+    }
+    for (int i = 0; i < 4; i++) {
+        if (makeBottomSurfaceIsException(cube)) {
+            makeBottomSurfaceRhsFish(cube);
+            makeBottomSurface(cube);
+            return;
+        }
+        cube.d();
+    }
     throw std::logic_error("can't match any pattern with the cube");
 }
 
