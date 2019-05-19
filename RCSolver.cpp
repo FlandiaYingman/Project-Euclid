@@ -381,10 +381,10 @@ RCCornerPiecePos findCorner(const RCCube &cube, const RCCornerPiece &corner) {
 }
 
 
-std::string changeFacing(const RCCube &cube, const RCFacing &front, const RCFacing &up) {
+std::string changeFacing(const RCCube &cube, const RCFacing &front, const RCFacing &down) {
     switch (front) {
     case RCFacing::LEFT:
-        switch (up) {
+        switch (down) {
         case RCFacing::UP:
             return "xd";
         case RCFacing::FRONT:
@@ -396,7 +396,7 @@ std::string changeFacing(const RCCube &cube, const RCFacing &front, const RCFaci
         }
         break;
     case RCFacing::RIGHT:
-        switch (up) {
+        switch (down) {
         case RCFacing::UP:
             return "xu";
         case RCFacing::BACK:
@@ -408,7 +408,7 @@ std::string changeFacing(const RCCube &cube, const RCFacing &front, const RCFaci
         }
         break;
     case RCFacing::UP:
-        switch (up) {
+        switch (down) {
         case RCFacing::FRONT:
             return "xu xu xl";
         case RCFacing::LEFT:
@@ -421,7 +421,7 @@ std::string changeFacing(const RCCube &cube, const RCFacing &front, const RCFaci
         break;
         ;
     case RCFacing::DOWN:
-        switch (up) {
+        switch (down) {
         case RCFacing::FRONT:
             return "xr";
         case RCFacing::RIGHT:
@@ -433,7 +433,7 @@ std::string changeFacing(const RCCube &cube, const RCFacing &front, const RCFaci
         }
         break;
     case RCFacing::FRONT:
-        switch (up) {
+        switch (down) {
         case RCFacing::UP:
             return "";
         case RCFacing::RIGHT:
@@ -445,7 +445,7 @@ std::string changeFacing(const RCCube &cube, const RCFacing &front, const RCFaci
         }
         break;
     case RCFacing::BACK:
-        switch (up) {
+        switch (down) {
         case RCFacing::UP:
             return "xu xu";
         case RCFacing::LEFT:
@@ -951,6 +951,69 @@ void makeMiddleLayer(RCCube &cube) {
     RCEdgePiecePos greenRedPos = findEdge(cube, RCEdgePiece(RCColor::GREEN, RCColor::RED));
     makeMiddleLayer0(cube, greenRedPos.first, adjacentDirection(greenRedPos.first, greenRedPos.second));
     cube.xu();
+}
+
+
+static bool makeBottomCrossIsStraight0(const RCCube &cube) {
+    auto down = cube.getDown();
+    bool downStraight = down[1][0] == RCColor::YELLOW && down[1][1] == RCColor::YELLOW && down[1][2] == RCColor::YELLOW;
+    auto front = cube.getFront();
+    bool frontStraight = front[2][1] == RCColor::YELLOW;
+    auto back = cube.getBack();
+    bool backStraight = back[2][1] == RCColor::YELLOW;
+    return downStraight && frontStraight && backStraight;
+}
+
+static bool makeBottomCrossIsBent0(const RCCube &cube) {
+    auto down = cube.getDown();
+    bool downStraight = down[1][1] == RCColor::YELLOW && down[1][2] == RCColor::YELLOW && down[2][1] == RCColor::YELLOW;
+    auto front = cube.getFront();
+    bool frontStraight = front[2][1] == RCColor::YELLOW;
+    auto left = cube.getLeft();
+    bool leftStraight = left[2][1] == RCColor::YELLOW;
+    return downStraight && frontStraight && leftStraight;
+}
+
+static bool makeBottomCrossIsFinished0(const RCCube &cube) {
+    auto down = cube.getDown();
+    return down[1][0] == RCColor::YELLOW && down[1][1] == RCColor::YELLOW && down[1][2] == RCColor::YELLOW && down[0][1] == RCColor::YELLOW && down[2][1] == RCColor::YELLOW;
+}
+
+static bool makeBottomCrossIsPoint0(const RCCube &cube) {
+    auto down = cube.getDown();
+    return down[1][0] != RCColor::YELLOW && down[1][1] == RCColor::YELLOW && down[1][2] != RCColor::YELLOW && down[0][1] != RCColor::YELLOW && down[2][1] != RCColor::YELLOW;
+}
+
+static void makeBottomCrossStraight0(RCCube &cube) {
+    cube.l().d().li().di().li().f().l().fi();
+}
+
+static void makeBottomCrossBent0(RCCube &cube) {
+    cube.f().l().di().li().di().l().d().li().fi();
+}
+
+void makeBottomCross(RCCube &cube) {
+    if (makeBottomCrossIsFinished0(cube)) {
+        return;
+    }
+    if (makeBottomCrossIsPoint0(cube)) {
+        makeBottomCrossStraight0(cube);
+    }
+
+    for (int i = 0; i < 4; i++) {
+        if (makeBottomCrossIsStraight0(cube)) {
+            makeBottomCrossStraight0(cube);
+            return;
+        }
+        if (makeBottomCrossIsBent0(cube)) {
+            makeBottomCrossBent0(cube);
+            return;
+        }
+        std::cout << cube << std::endl;
+        cube.d();
+    }
+
+    throw std::logic_error("can't match any pattern with the cube");
 }
 
 } // namespace Rc

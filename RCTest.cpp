@@ -16,6 +16,8 @@ static void testMakeTopLayer();
 static void testMakeTopLayer(string str);
 static void testMakeMiddleLayer();
 static void testMakeMiddleLayer(string str);
+static void testMakeBottomCross();
+static void testMakeBottomCross(string str);
 
 
 int main() {
@@ -25,9 +27,9 @@ int main() {
     std::string testStr0 = "O W R R W R R Y R  Y B B R G O B G O  W B Y Y R B G R W  B W G O B G G W R  Y O B O O G G B O  Y Y O Y Y G W W W";
     std::string testStr1 = "R O O G W O G O W  Y R O Y G Y B W R  Y Y B B R W W W B  O G G G B Y O B W  W W G R O G R B R  B R Y B Y R Y O G";
     std::string testStr2 = "B R G G W W W G B  W Y R R G Y R G Y  B O Y B R B G R B  O B O O B R Y W W  Y Y O G O W G O W  R B R W Y O G Y O";
+    std::string testStr3 = "G G B B W O W G R  Y W G B G B G W R  R O G R R O W O B  Y W R B B G W Y Y  Y Y O W O Y B G W  B Y O R Y R O R O";
 
-
-    testMakeMiddleLayer();
+    testMakeBottomCross();
 
     return 0;
 }
@@ -149,5 +151,39 @@ static void testMakeMiddleLayer(string str) {
     makeTopCross(cube);
     makeTopLayer(cube);
     makeMiddleLayer(cube);
+    cout << cube << endl;
+}
+
+static void testMakeBottomCross() {
+    auto cube = RCCube();
+    while (true) {
+        RCCube::randomize(cube);
+        auto cubeCopy = cube;
+        cout << cubeCopy << endl;
+
+        makeTopCross(cube);
+        makeTopLayer(cube);
+        makeMiddleLayer(cube);
+        makeBottomCross(cube);
+
+        cout << cube << endl;
+
+        auto down = cube.getDown();
+        if (!(down[1][0] == RCColor::YELLOW && down[1][1] == RCColor::YELLOW && down[1][2] == RCColor::YELLOW && down[0][1] == RCColor::YELLOW && down[2][1] == RCColor::YELLOW)) {
+            throw logic_error("ex");
+        }
+    }
+}
+
+static void testMakeBottomCross(string str) {
+    stringstream sstream(str);
+    RCCube cube;
+    sstream >> cube;
+
+    cout << cube << endl;
+    makeTopCross(cube);
+    makeTopLayer(cube);
+    makeMiddleLayer(cube);
+    makeBottomCross(cube);
     cout << cube << endl;
 }
