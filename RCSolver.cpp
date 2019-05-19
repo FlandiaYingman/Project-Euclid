@@ -1080,4 +1080,64 @@ void makeBottomSurface(RCCube &cube) {
     throw std::logic_error("can't match any pattern with the cube");
 }
 
+
+static bool makeBottomCornerAreEyes(const RCCube &cube) {
+    auto right = cube.getRight();
+    return right[2][0] == right[2][2];
+}
+
+static bool makeBottomCornerIsFinished(const RCCube &cube) {
+    auto eyesCount = 0;
+    auto front = cube.getFront();
+    if (front[2][0] == front[2][2]) {
+        eyesCount++;
+    }
+    auto back = cube.getBack();
+    if (back[2][0] == back[2][2]) {
+        eyesCount++;
+    }
+    auto left = cube.getLeft();
+    if (left[2][0] == left[2][2]) {
+        eyesCount++;
+    }
+    auto right = cube.getRight();
+    if (right[2][0] == right[2][2]) {
+        eyesCount++;
+    }
+    return eyesCount >= 3;
+}
+
+static void makeBottomCornerStraight(RCCube &cube) {
+    cube.l().d().li().di().li().f().l().fi();
+}
+
+static void makeBottomCornerBent(RCCube &cube) {
+    cube.f().l().di().li().di().l().d().li().fi();
+}
+
+static void makeBottomCornerAlign(RCCube &cube) {
+    while (cube.getFront()[2][2] != RCColor::RED) {
+        cube.d();
+    }
+}
+
+void makeBottomCorner(RCCube &cube) {
+    if (makeBottomCornerIsFinished(cube)) {
+        makeBottomCornerAlign(cube);
+        return;
+    }
+    for (int i = 0; i < 4; i++) {
+        if (makeBottomCornerAreEyes(cube)) {
+            makeBottomCornerStraight(cube);
+            makeBottomCornerBent(cube);
+            makeBottomCornerAlign(cube);
+            return;
+        }
+        cube.d();
+    }
+    makeBottomCornerBent(cube);
+    makeBottomCornerStraight(cube);
+    makeBottomCornerAlign(cube);
+}
+
 } // namespace Rc

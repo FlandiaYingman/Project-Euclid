@@ -41,6 +41,8 @@ void makeBottomCross(RCCube &cube);
 
 void makeBottomSurface(RCCube &cube);
 
+void makeBottomCorner(RCCube &cube);
+
 } // namespace Rc
 
 #endif // RC_SOLVER_H_
