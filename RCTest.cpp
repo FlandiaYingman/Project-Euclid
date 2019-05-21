@@ -22,6 +22,8 @@ static void testMakeBottomSurface();
 static void testMakeBottomSurface(string str);
 static void testMakeBottomCorner();
 static void testMakeBottomCorner(string str);
+static void testMakeBottomEdge();
+static void testMakeBottomEdge(string str);
 
 
 int main() {
@@ -36,7 +38,7 @@ int main() {
     std::string testStr5 = "B B W Y W W R B Y  W R B R G R W R G  W W O W R Y Y Y R  B G O G B G Y W Y  G O O O O B R O G  O B G G Y O R Y B";
 
 
-    testMakeBottomCorner();
+    testMakeBottomEdge();
 
     return 0;
 }
@@ -288,5 +290,48 @@ static void testMakeBottomCorner(string str) {
     makeBottomCross(cube);
     makeBottomSurface(cube);
     makeBottomCorner(cube);
+    cout << cube << endl;
+}
+
+static bool makeBottomEdgeIsFinished(RCSurface surface) {
+    return surface[1][0] == surface[2][0] && surface[2][0] == surface[2][1];
+}
+
+static void testMakeBottomEdge() {
+    auto cube = RCCube();
+    while (true) {
+        RCCube::randomize(cube);
+        auto cubeCopy = cube;
+        cout << cubeCopy << endl;
+
+        makeTopCross(cube);
+        makeTopLayer(cube);
+        makeMiddleLayer(cube);
+        makeBottomCross(cube);
+        makeBottomSurface(cube);
+        makeBottomCorner(cube);
+        makeBottomEdge(cube);
+
+        cout << cube << endl;
+
+        if (!(makeBottomEdgeIsFinished(cube.getFront()) && makeBottomEdgeIsFinished(cube.getBack()) && makeBottomEdgeIsFinished(cube.getLeft()) && makeBottomEdgeIsFinished(cube.getRight()))) {
+            throw logic_error("ex");
+        }
+    }
+}
+
+static void testMakeBottomEdge(string str) {
+    stringstream sstream(str);
+    RCCube cube;
+    sstream >> cube;
+
+    cout << cube << endl;
+    makeTopCross(cube);
+    makeTopLayer(cube);
+    makeMiddleLayer(cube);
+    makeBottomCross(cube);
+    makeBottomSurface(cube);
+    makeBottomCorner(cube);
+    makeBottomEdge(cube);
     cout << cube << endl;
 }

@@ -1140,4 +1140,75 @@ void makeBottomCorner(RCCube &cube) {
     makeBottomCornerAlign(cube);
 }
 
+
+static bool makeBottomEdgeAreEyes(RCSurface surface) {
+    return surface[2][0] == surface[2][2] && surface[2][0] != surface[2][1];
+}
+
+static void makeBottomEdgeLhsFish(RCCube &cube) {
+    cube.ri().di().r().di().ri().d2().r();
+}
+
+static void makeBottomEdgeRhsFish(RCCube &cube) {
+    cube.l().d().li().d().l().d2().li();
+}
+
+static void makeBottomEdgeAlign(RCCube &cube) {
+    while (cube.getFront()[2][2] != RCColor::RED) {
+        cube.d();
+    }
+}
+
+void makeBottomEdge(RCCube &cube) {
+    bool leftEyes = makeBottomEdgeAreEyes(cube.getLeft());
+    bool frontEyes = makeBottomEdgeAreEyes(cube.getFront());
+    bool rightEyes = makeBottomEdgeAreEyes(cube.getRight());
+    bool backEyes = makeBottomEdgeAreEyes(cube.getBack());
+    auto eyesCount = 0;
+    if (leftEyes) {
+        eyesCount++;
+    }
+    if (frontEyes) {
+        eyesCount++;
+    }
+    if (rightEyes) {
+        eyesCount++;
+    }
+    if (backEyes) {
+        eyesCount++;
+    }
+    if (eyesCount == 3) {
+        if (!leftEyes) {
+            cube.di();
+        }
+        if (!frontEyes) {
+            cube.d2();
+        }
+        if (!rightEyes) {
+            cube.d();
+        }
+        auto frontEyesColor = cube.getFront()[2][0];
+        auto leftColor = cube.getLeft()[2][1];
+        if (leftColor == frontEyesColor) {
+            makeBottomEdgeRhsFish(cube);
+            cube.d();
+            makeBottomEdgeLhsFish(cube);
+        } else {
+            makeBottomEdgeLhsFish(cube);
+            cube.di();
+            makeBottomEdgeRhsFish(cube);
+        }
+        makeBottomCornerAlign(cube);
+    } else if (eyesCount == 4) {
+        makeBottomEdgeRhsFish(cube);
+        cube.d();
+        makeBottomEdgeLhsFish(cube);
+        makeBottomEdge(cube);
+    } else if (eyesCount == 0) {
+        return;
+    } else {
+        throw std::logic_error("there are not 3 or 4 eyes");
+    }
+}
+
 } // namespace Rc
