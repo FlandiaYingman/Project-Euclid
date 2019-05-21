@@ -24,7 +24,7 @@ class RCCube {
 
   public:
     RCCube();
-    RCCube(RCSurface left, RCSurface right, RCSurface up, RCSurface down, RCSurface front, RCSurface back);
+    RCCube(const RCSurface left, const RCSurface right, const RCSurface up, const RCSurface down, const RCSurface front, const RCSurface back);
 
     static void randomize(RCCube &cube);
 
@@ -35,7 +35,7 @@ class RCCube {
     RCSurface getFront() const;
     RCSurface getBack() const;
 
-    RCSurface get(RCFacing facing) const;
+    RCSurface get(const RCFacing facing) const;
 
     RCCube &l();
     RCCube &r();
@@ -72,12 +72,12 @@ class RCCube {
     RCCube &cf();
     RCCube &cb();
 
-    RCCube &doString(std::string str);
+    RCCube &doString(const std::string str);
 };
 
-std::ostream &operator<<(std::ostream &strm, const RCFacing &facing);
+std::ostream &operator<<(std::ostream &strm, const RCFacing facing);
 
-std::ostream &operator<<(std::ostream &strm, RCCube cube);
+std::ostream &operator<<(std::ostream &strm, const RCCube cube);
 std::istream &operator>>(std::istream &strm, RCCube &cube);
 
 } // namespace Rc

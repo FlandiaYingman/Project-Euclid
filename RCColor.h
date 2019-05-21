@@ -15,7 +15,7 @@ enum class RCColor : char {
     NUL = '-',
 };
 
-std::ostream &operator<<(std::ostream &strm, RCColor color);
+std::ostream &operator<<(std::ostream &strm, const RCColor color);
 std::istream &operator>>(std::istream &strm, RCColor &color);
 
 } // namespace Rc

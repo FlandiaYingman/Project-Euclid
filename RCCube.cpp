@@ -16,7 +16,7 @@ RCCube::RCCube() {
     this->front = RCSurface(RCColor::RED);
     this->back = RCSurface(RCColor::ORANGE);
 }
-RCCube::RCCube(RCSurface left, RCSurface right, RCSurface up, RCSurface down, RCSurface front, RCSurface back) {
+RCCube::RCCube(const RCSurface left, const RCSurface right, const RCSurface up, const RCSurface down, const RCSurface front, const RCSurface back) {
     this->left = left;
     this->right = right;
     this->up = up;
@@ -275,7 +275,7 @@ RCCube &RCCube::cb() {
     return bi().f().xb();
 }
 
-RCCube &RCCube::doString(std::string str) {
+RCCube &RCCube::doString(const std::string str) {
     std::stringstream sstream(str);
     while (!sstream.eof()) {
         std::string unit;
@@ -324,7 +324,7 @@ RCCube &RCCube::doString(std::string str) {
 }
 
 
-std::ostream &operator<<(std::ostream &strm, const RCFacing &facing) {
+std::ostream &operator<<(std::ostream &strm, const RCFacing facing) {
     std::string str;
     switch (facing) {
     case RCFacing::LEFT:
@@ -353,7 +353,7 @@ std::ostream &operator<<(std::ostream &strm, const RCFacing &facing) {
     return strm;
 }
 
-std::ostream &operator<<(std::ostream &strm, RCCube cube) {
+std::ostream &operator<<(std::ostream &strm, const RCCube cube) {
     for (size_t i = 0; i < 3; i++) {
         for (size_t j = 0; j < 3 * 4; j++) {
             if (j >= 3 && j <= 5) {

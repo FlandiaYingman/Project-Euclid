@@ -8,40 +8,40 @@ namespace Rc {
 
 RCLine::RCLine() {
 }
-RCLine::RCLine(std::initializer_list<RCColor> initList) {
+RCLine::RCLine(const std::initializer_list<RCColor> initList) {
     int i = 0;
     for (auto color : initList) {
         line[i++] = color;
     }
 }
 
-RCColor RCLine::operator[](size_t i) {
+RCColor RCLine::operator[](const size_t i) const {
     return line[i];
 }
 
-RCLine RCLine::reverse() {
+RCLine RCLine::reverse() const {
     return { line[2], line[1], line[0] };
 }
 
 
 RCSurface::RCSurface() {
 }
-RCSurface::RCSurface(RCColor color) {
+RCSurface::RCSurface(const RCColor color) {
     RCLine line = { color, color, color };
     surface = { line, line, line };
 }
-RCSurface::RCSurface(std::initializer_list<RCLine> initList) {
+RCSurface::RCSurface(const std::initializer_list<RCLine> initList) {
     int i = 0;
     for (auto line : initList) {
         surface[i++] = line;
     }
 }
 
-RCLine RCSurface::operator[](size_t i) {
+RCLine RCSurface::operator[](const size_t i) const {
     return surface[i];
 }
 
-RCColor RCSurface::get(RCDirection direction) {
+RCColor RCSurface::get(RCDirection direction) const {
     switch (direction) {
     case RCDirection::UP:
         return (*this)[0][1];
@@ -64,59 +64,59 @@ RCColor RCSurface::get(RCDirection direction) {
     }
 }
 
-RCSurface RCSurface::rotateClockwise() {
+RCSurface RCSurface::rotateClockwise() const {
     return RCSurface({ { surface[2][0], surface[1][0], surface[0][0] }, { surface[2][1], surface[1][1], surface[0][1] }, { surface[2][2], surface[1][2], surface[0][2] } });
 }
-RCSurface RCSurface::rotateAntiClockwise() {
+RCSurface RCSurface::rotateAntiClockwise() const {
     return rotateClockwise().rotateClockwise().rotateClockwise();
 }
 
-RCSurface RCSurface::reverseX() {
+RCSurface RCSurface::reverseX() const {
     return RCSurface({ { surface[0][2], surface[0][1], surface[0][0] }, { surface[1][2], surface[1][1], surface[1][0] }, { surface[2][2], surface[2][1], surface[2][0] } });
 }
-RCSurface RCSurface::reverseY() {
+RCSurface RCSurface::reverseY() const {
     return RCSurface({ { surface[2][0], surface[2][1], surface[2][2] }, { surface[1][0], surface[1][1], surface[1][2] }, { surface[0][0], surface[0][1], surface[0][2] } });
 }
 
-RCLine RCSurface::getTopRow() {
+RCLine RCSurface::getTopRow() const {
     return { surface[0][0], surface[0][1], surface[0][2] };
 }
-RCLine RCSurface::getMiddleRow() {
+RCLine RCSurface::getMiddleRow() const {
     return { surface[1][0], surface[1][1], surface[1][2] };
 }
-RCLine RCSurface::getBottomRow() {
+RCLine RCSurface::getBottomRow() const {
     return { surface[2][0], surface[2][1], surface[2][2] };
 }
-RCLine RCSurface::getLeftColumn() {
+RCLine RCSurface::getLeftColumn() const {
     return { surface[0][0], surface[1][0], surface[2][0] };
 }
-RCLine RCSurface::getMiddleColumn() {
+RCLine RCSurface::getMiddleColumn() const {
     return { surface[0][1], surface[1][1], surface[2][1] };
 }
-RCLine RCSurface::getRightColumn() {
+RCLine RCSurface::getRightColumn() const {
     return { surface[0][2], surface[1][2], surface[2][2] };
 }
 
-RCSurface RCSurface::withTopRow(RCLine line) {
+RCSurface RCSurface::withTopRow(const RCLine line) const {
     return { { line[0], line[1], line[2] }, { surface[1][0], surface[1][1], surface[1][2] }, { surface[2][0], surface[2][1], surface[2][2] } };
 }
-RCSurface RCSurface::withMiddleRow(RCLine line) {
+RCSurface RCSurface::withMiddleRow(const RCLine line) const {
     return { { surface[0][0], surface[0][1], surface[0][2] }, { line[0], line[1], line[2] }, { surface[2][0], surface[2][1], surface[2][2] } };
 }
-RCSurface RCSurface::withBottomRow(RCLine line) {
+RCSurface RCSurface::withBottomRow(const RCLine line) const {
     return { { surface[0][0], surface[0][1], surface[0][2] }, { surface[1][0], surface[1][1], surface[1][2] }, { line[0], line[1], line[2] } };
 }
-RCSurface RCSurface::withLeftColumn(RCLine line) {
+RCSurface RCSurface::withLeftColumn(const RCLine line) const {
     return { { line[0], surface[0][1], surface[0][2] }, { line[1], surface[1][1], surface[1][2] }, { line[2], surface[2][1], surface[2][2] } };
 }
-RCSurface RCSurface::withMiddleColumn(RCLine line) {
+RCSurface RCSurface::withMiddleColumn(const RCLine line) const {
     return { { surface[0][0], line[0], surface[0][2] }, { surface[1][0], line[1], surface[1][2] }, { surface[2][0], line[2], surface[2][2] } };
 }
-RCSurface RCSurface::withRightColumn(RCLine line) {
+RCSurface RCSurface::withRightColumn(const RCLine line) const {
     return { { surface[0][0], surface[0][1], line[0] }, { surface[1][0], surface[1][1], line[1] }, { surface[2][0], surface[2][1], line[2] } };
 }
 
-std::ostream &operator<<(std::ostream &strm, RCSurface surface) {
+std::ostream &operator<<(std::ostream &strm, const RCSurface surface) {
     for (size_t i = 0; i < 3; i++) {
         for (size_t j = 0; j < 3; j++) {
             strm << surface[i][j] << " ";

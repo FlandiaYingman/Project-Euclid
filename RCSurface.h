@@ -27,11 +27,11 @@ class RCLine {
 
   public:
     RCLine();
-    RCLine(std::initializer_list<RCColor> initList);
+    RCLine(const std::initializer_list<RCColor> initList);
 
-    RCColor operator[](size_t i);
+    RCColor operator[](const size_t i) const;
 
-    RCLine reverse();
+    RCLine reverse() const;
 };
 
 class RCSurface {
@@ -40,35 +40,35 @@ class RCSurface {
 
   public:
     RCSurface();
-    RCSurface(RCColor color);
-    RCSurface(std::initializer_list<RCLine> initList);
+    RCSurface(const RCColor color);
+    RCSurface(const std::initializer_list<RCLine> initList);
 
-    RCLine operator[](size_t i);
+    RCLine operator[](const size_t i) const;
 
-    RCColor get(RCDirection direction);
+    RCColor get(const RCDirection direction) const;
 
-    RCSurface rotateClockwise();
-    RCSurface rotateAntiClockwise();
+    RCSurface rotateClockwise() const;
+    RCSurface rotateAntiClockwise() const;
 
-    RCSurface reverseX();
-    RCSurface reverseY();
+    RCSurface reverseX() const;
+    RCSurface reverseY() const;
 
-    RCLine getTopRow();
-    RCLine getMiddleRow();
-    RCLine getBottomRow();
-    RCLine getLeftColumn();
-    RCLine getMiddleColumn();
-    RCLine getRightColumn();
+    RCLine getTopRow() const;
+    RCLine getMiddleRow() const;
+    RCLine getBottomRow() const;
+    RCLine getLeftColumn() const;
+    RCLine getMiddleColumn() const;
+    RCLine getRightColumn() const;
 
-    RCSurface withTopRow(RCLine line);
-    RCSurface withMiddleRow(RCLine line);
-    RCSurface withBottomRow(RCLine line);
-    RCSurface withLeftColumn(RCLine line);
-    RCSurface withMiddleColumn(RCLine line);
-    RCSurface withRightColumn(RCLine line);
+    RCSurface withTopRow(const RCLine line) const;
+    RCSurface withMiddleRow(const RCLine line) const;
+    RCSurface withBottomRow(const RCLine line) const;
+    RCSurface withLeftColumn(const RCLine line) const;
+    RCSurface withMiddleColumn(const RCLine line) const;
+    RCSurface withRightColumn(const RCLine line) const;
 };
 
-std::ostream &operator<<(std::ostream &strm, RCSurface surface);
+std::ostream &operator<<(std::ostream &strm, const RCSurface surface);
 std::istream &operator>>(std::istream &strm, RCSurface &surface);
 
 } // namespace Rc

@@ -2,7 +2,7 @@
 
 namespace Rc {
 
-std::ostream &operator<<(std::ostream &strm, RCColor color) {
+std::ostream &operator<<(std::ostream &strm, const RCColor color) {
     return strm << (char)color;
 }
 std::istream &operator>>(std::istream &strm, RCColor &color) {
