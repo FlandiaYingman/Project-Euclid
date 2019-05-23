@@ -37,42 +37,42 @@ class RCCube {
 
     RCSurface get(const RCFacing facing) const;
 
-    RCCube &l();
-    RCCube &r();
-    RCCube &u();
-    RCCube &d();
-    RCCube &f();
-    RCCube &b();
+    virtual RCCube &l();
+    virtual RCCube &r();
+    virtual RCCube &u();
+    virtual RCCube &d();
+    virtual RCCube &f();
+    virtual RCCube &b();
 
-    RCCube &ri();
-    RCCube &li();
-    RCCube &ui();
-    RCCube &di();
-    RCCube &fi();
-    RCCube &bi();
+    virtual RCCube &li();
+    virtual RCCube &ri();
+    virtual RCCube &ui();
+    virtual RCCube &di();
+    virtual RCCube &fi();
+    virtual RCCube &bi();
 
-    RCCube &r2();
-    RCCube &l2();
-    RCCube &u2();
-    RCCube &d2();
-    RCCube &f2();
-    RCCube &b2();
+    virtual RCCube &l2();
+    virtual RCCube &r2();
+    virtual RCCube &u2();
+    virtual RCCube &d2();
+    virtual RCCube &f2();
+    virtual RCCube &b2();
 
-    RCCube &xl();
-    RCCube &xr();
-    RCCube &xu();
-    RCCube &xd();
-    RCCube &xf();
-    RCCube &xb();
+    virtual RCCube &xl();
+    virtual RCCube &xr();
+    virtual RCCube &xu();
+    virtual RCCube &xd();
+    virtual RCCube &xf();
+    virtual RCCube &xb();
 
-    RCCube &cl();
-    RCCube &cr();
-    RCCube &cu();
-    RCCube &cd();
-    RCCube &cf();
-    RCCube &cb();
+    virtual RCCube &cl();
+    virtual RCCube &cr();
+    virtual RCCube &cu();
+    virtual RCCube &cd();
+    virtual RCCube &cf();
+    virtual RCCube &cb();
 
-    RCCube &doString(const std::string str);
+    virtual RCCube &doString(const std::string str);
 };
 
 std::ostream &operator<<(std::ostream &strm, const RCFacing facing);

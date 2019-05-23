@@ -148,71 +148,72 @@ RCCube &RCCube::b() {
     return *this;
 }
 
-RCCube &RCCube::ri() {
-    r();
-    r();
-    r();
+
+RCCube &RCCube::li() {
+    RCCube::l();
+    RCCube::l();
+    RCCube::l();
     return *this;
 }
-RCCube &RCCube::li() {
-    l();
-    l();
-    l();
+RCCube &RCCube::ri() {
+    RCCube::r();
+    RCCube::r();
+    RCCube::r();
     return *this;
 }
 RCCube &RCCube::ui() {
-    u();
-    u();
-    u();
+    RCCube::u();
+    RCCube::u();
+    RCCube::u();
     return *this;
 }
 RCCube &RCCube::di() {
-    d();
-    d();
-    d();
+    RCCube::d();
+    RCCube::d();
+    RCCube::d();
     return *this;
 }
 RCCube &RCCube::fi() {
-    f();
-    f();
-    f();
+    RCCube::f();
+    RCCube::f();
+    RCCube::f();
     return *this;
 }
 RCCube &RCCube::bi() {
-    b();
-    b();
-    b();
+    RCCube::b();
+    RCCube::b();
+    RCCube::b();
     return *this;
 }
 
-RCCube &RCCube::r2() {
-    r();
-    r();
+RCCube &RCCube::l2() {
+    RCCube::l();
+    RCCube::l();
     return *this;
 }
-RCCube &RCCube::l2() {
-    l();
-    l();
+RCCube &RCCube::r2() {
+    RCCube::r();
+    RCCube::r();
     return *this;
 }
 RCCube &RCCube::u2() {
-    u();
-    u();
+    RCCube::u();
+    RCCube::u();
     return *this;
 }
 RCCube &RCCube::d2() {
-    d();
-    d();
+    RCCube::d();
+    RCCube::d();
     return *this;
 }
 RCCube &RCCube::f2() {
-    f();
-    f();
+    RCCube::f();
+    RCCube::f();
     return *this;
 }
 RCCube &RCCube::b2() {
-    b();
-    b();
+    RCCube::b();
+    RCCube::b();
     return *this;
 }
 
@@ -227,7 +228,7 @@ RCCube &RCCube::xl() {
     return *this;
 }
 RCCube &RCCube::xr() {
-    return xl().xl().xl();
+    return RCCube::xl().RCCube::xl().RCCube::xl();
 }
 RCCube &RCCube::xu() {
     RCCube temp = *this;
@@ -240,7 +241,7 @@ RCCube &RCCube::xu() {
     return *this;
 }
 RCCube &RCCube::xd() {
-    return xu().xu().xu();
+    return RCCube::xu().RCCube::xu().RCCube::xu();
 }
 RCCube &RCCube::xf() {
     RCCube temp = *this;
@@ -253,26 +254,26 @@ RCCube &RCCube::xf() {
     return *this;
 }
 RCCube &RCCube::xb() {
-    return xf().xf().xf();
+    return RCCube::xf().RCCube::xf().RCCube::xf();
 }
 
 RCCube &RCCube::cl() {
-    return li().r().xl();
+    return RCCube::li().RCCube::r().RCCube::xl();
 }
 RCCube &RCCube::cr() {
-    return ri().l().xr();
+    return RCCube::ri().RCCube::l().RCCube::xr();
 }
 RCCube &RCCube::cu() {
-    return ui().d().xu();
+    return RCCube::ui().RCCube::d().RCCube::xu();
 }
 RCCube &RCCube::cd() {
-    return di().u().xd();
+    return RCCube::di().RCCube::u().RCCube::xd();
 }
 RCCube &RCCube::cf() {
-    return fi().b().xf();
+    return RCCube::fi().RCCube::b().RCCube::xf();
 }
 RCCube &RCCube::cb() {
-    return bi().f().xb();
+    return RCCube::bi().RCCube::f().RCCube::xb();
 }
 
 RCCube &RCCube::doString(const std::string str) {
@@ -316,12 +317,36 @@ RCCube &RCCube::doString(const std::string str) {
             f2();
         } else if (unit == "b2") {
             b2();
+        } else if (unit == "xl") {
+            xl();
+        } else if (unit == "xr") {
+            xr();
+        } else if (unit == "xu") {
+            xu();
+        } else if (unit == "xd") {
+            xd();
+        } else if (unit == "xf") {
+            xf();
+        } else if (unit == "xb") {
+            xb();
+        } else if (unit == "cl") {
+            cl();
+        } else if (unit == "cr") {
+            cr();
+        } else if (unit == "cu") {
+            cu();
+        } else if (unit == "cd") {
+            cd();
+        } else if (unit == "cf") {
+            cf();
+        } else if (unit == "cb") {
+            cb();
         } else {
             std::cerr << "Unknown unit: \"" << unit << "\"" << std::endl;
         }
     }
     return *this;
-}
+} // namespace Rc
 
 
 std::ostream &operator<<(std::ostream &strm, const RCFacing facing) {
