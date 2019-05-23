@@ -3,6 +3,7 @@
 
 #include "RCColor.h"
 #include "RCCube.h"
+#include "RCCubeRecorder.h"
 #include "RCSolver.h"
 #include "RCSurface.h"
 

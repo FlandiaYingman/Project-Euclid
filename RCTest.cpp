@@ -24,6 +24,7 @@ static void testMakeBottomCorner();
 static void testMakeBottomCorner(string str);
 static void testMakeBottomEdge();
 static void testMakeBottomEdge(string str);
+static void testRCCubeRecorder(string str);
 
 
 int main() {
@@ -38,7 +39,7 @@ int main() {
     std::string testStr5 = "B B W Y W W R B Y  W R B R G R W R G  W W O W R Y Y Y R  B G O G B G Y W Y  G O O O O B R O G  O B G G Y O R Y B";
 
 
-    testMakeBottomEdge();
+    testRCCubeRecorder(testStr0);
 
     return 0;
 }
@@ -334,4 +335,23 @@ static void testMakeBottomEdge(string str) {
     makeBottomCorner(cube);
     makeBottomEdge(cube);
     cout << cube << endl;
+}
+
+static void testRCCubeRecorder(string str) {
+    RCCubeRecorder cube;
+    std::istringstream isstream(str);
+    isstream >> cube;
+
+
+    cout << cube << endl;
+    makeTopCross(cube);
+    makeTopLayer(cube);
+    makeMiddleLayer(cube);
+    makeBottomCross(cube);
+    makeBottomSurface(cube);
+    makeBottomCorner(cube);
+    makeBottomEdge(cube);
+    cout << cube << endl;
+
+    cout << cube.getString() << endl;
 }
